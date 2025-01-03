@@ -5,3 +5,5 @@ langchain
 flask
 GitPython
 python-dotenv
+langchain-community
+langchain_openai
