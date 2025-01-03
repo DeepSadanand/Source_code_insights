@@ -16,13 +16,13 @@ from langchain_openai import OpenAIEmbeddings
 def repo_ingestion(repo_url):
     os.makedirs("/repo",exist_ok = True)
     repo_path = "repo/"
-    Repo.clone_from(repo_url,repo_path)
+    Repo.clone_from(repo_url,to_path=repo_path)
 
 def repo_load(repo_path):
     loader = GenericLoader.from_filesystem(repo_path, 
-                             glob="**/**",
+                             glob="**/[!.]*",
                              suffixes = [".py"],
-                             parser = LanguageParser(language = "python",parser_threshold = 200),
+                             parser = LanguageParser(language=Language.PYTHON, parser_threshold=500),
                              )
     documents = loader.load()
 
@@ -37,10 +37,11 @@ def text_splitter(documents):
     )
 
     text_chunks = document_splitter.split_documents(documents)
+    print(len(text_chunks))
     return text_chunks
 
 
 def load_embedding():
 
-    embeddings = OpenAIEmbeddings(disallowed_special = "all")
+    embeddings = OpenAIEmbeddings()
     return embeddings
